@@ -223,7 +223,7 @@ def validate_header(header: Header, parent_header: Header) -> None:
     if header.difficulty != block_difficulty:
         raise InvalidBlock
 
-    block_parent_hash = keccak256(rlp.encode(parent_header))
+    block_parent_hash = compute_header_hash(parent_header)
     if header.parent_hash != block_parent_hash:
         raise InvalidBlock
 

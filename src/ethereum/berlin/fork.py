@@ -60,7 +60,7 @@ GAS_LIMIT_MINIMUM = 5000
 MINIMUM_DIFFICULTY = Uint(131072)
 MAX_OMMER_DEPTH = 6
 BOMB_DELAY_BLOCKS = 9000000
-EMPTY_OMMER_HASH = keccak256(rlp.encode([]))
+EMPTY_OMMER_HASH = compute_header_hash([])
 
 
 @dataclass
@@ -130,7 +130,7 @@ def get_last_256_block_hashes(chain: BlockChain) -> List[Hash32]:
     # We are computing the hash only for the most recent block and not for
     # the rest of the blocks as they have successors which have the hash of
     # the current block as parent hash.
-    most_recent_block_hash = keccak256(rlp.encode(recent_blocks[-1].header))
+    most_recent_block_hash = compute_header_hash(recent_blocks[-1].header)
     recent_block_hashes.append(most_recent_block_hash)
 
     return recent_block_hashes
@@ -229,7 +229,7 @@ def validate_header(header: Header, parent_header: Header) -> None:
     if header.difficulty != block_difficulty:
         raise InvalidBlock
 
-    block_parent_hash = keccak256(rlp.encode(parent_header))
+    block_parent_hash = compute_header_hash(parent_header)
     if header.parent_hash != block_parent_hash:
         raise InvalidBlock
 
